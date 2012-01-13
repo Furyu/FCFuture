@@ -9,6 +9,33 @@
 #import "FCFutureTests.h"
 #import "FCFuture.h"
 
+@interface VerySlowCalculator : NSObject
+
+- (FCFuture *)add:(int)a and:(int)b;
+
+@end
+
+@implementation VerySlowCalculator
+
+// You should not return a promise, but return a future, as promises are write-side of the future values and futures are
+// read-side of them.
+// Concretely speaking, FCFuture does not have the selector `redeem:`, but FCPromise does.
+- (FCFuture *)add:(int)a and:(int)b
+{
+    FCPromise *promise = [[[FCPromise alloc] init] autorelease];
+    // Although the computation takes a long time, invoking this method does not block the current thread.
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // This is a very long computation
+        usleep(1000 * 100);
+        // Redeem the  promise
+        [promise redeem:[NSNumber numberWithInt:a + b]];
+    });
+    // And the invoker can obtain the result through a promise.
+    return promise;
+}
+
+@end
+
 @implementation FCFutureTests
 
 - (void)setUp
@@ -88,6 +115,27 @@
     });
 
     STAssertEquals(count, 1, @"redeemed count");
+}
+
+- (void)testFuture
+{
+    FCFuture *future = [[[[VerySlowCalculator alloc] init] autorelease] add:1 and:2];
+    NSCondition *condition = [[[NSCondition alloc] init] autorelease];
+    __block int count = 0;
+    [future onRedeem:^(NSNumber *value) {
+        int result = [value intValue];
+        STAssertEquals(3, result, @"1 + 2 = 3");
+        [condition lock];
+        count ++;
+        [condition signal];
+        [condition unlock];
+    }];
+
+    [condition lock];
+    [condition wait];
+    [condition unlock];
+    
+    STAssertEquals(1, count, "redeem count = %d", count);
 }
 
 @end
