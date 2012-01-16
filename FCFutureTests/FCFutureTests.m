@@ -61,6 +61,7 @@
     [promise redeem:@"value1"];
     
     [promise onRedeem:^(id value) {
+        STAssertTrue([NSThread isMainThread], @"The block should be invoked on main thread.");
         STAssertEqualObjects(value, @"value1", @"It should be called back with the redeemed value. value = %@", value);
     }];
 }
@@ -71,6 +72,7 @@
     FCPromise *promise = [[[FCPromise alloc] init] autorelease];
 
     [promise onRedeem:^(id value) {
+        STAssertTrue([NSThread isMainThread], @"The block should be invoked on main thread.");
         STAssertEqualObjects(value, @"value2", @"It should be called back with the redeemed value. value = %@", value);
     }];
 
@@ -117,24 +119,98 @@
     STAssertEquals(count, 1, @"redeemed count");
 }
 
-- (void)testFuture
+- (void)testTwoCallbacksOnRedeemFirst
 {
-    FCFuture *future = [[[[VerySlowCalculator alloc] init] autorelease] add:1 and:2];
-    NSCondition *condition = [[[NSCondition alloc] init] autorelease];
     __block int count = 0;
-    [future onRedeem:^(NSNumber *value) {
-        int result = [value intValue];
-        STAssertEquals(3, result, @"1 + 2 = 3");
-        [condition lock];
+    FCPromise *promise = [[[FCPromise alloc] init] autorelease];
+    [promise onRedeem:^(id value) {
+        STAssertEqualObjects(value, @"value1", @"value of promise = %@", value);
         count ++;
-        [condition signal];
-        [condition unlock];
+    }];
+    [promise onRedeem:^(id value) {
+        STAssertEqualObjects(value, @"value1", @"value of promise = $@", value);
+        count ++;
+    }];
+    [promise redeem:@"value1"];
+    
+    STAssertEquals(count, 2, @"promise should be redeemed 2 times, but redeemed %d times.", count);
+}
+
+- (void)testTwoCallbacksRedeemFirst
+{
+    __block int count = 0;
+    FCPromise *promise = [[[FCPromise alloc] init] autorelease];
+    [promise redeem:@"value1"];
+    [promise onRedeem:^(id value) {
+        STAssertEqualObjects(value, @"value1", @"value of promise = %@", value);
+        count ++;
+    }];
+    STAssertEquals(count, 1, @"The redeem-callback should be invoked immediately after -[FCPromise onRedeem:] call.");
+    [promise onRedeem:^(id value) {
+        STAssertEqualObjects(value, @"value1", @"value of promise = $@", value);
+        count ++;
     }];
 
-    [condition lock];
-    [condition wait];
-    [condition unlock];
+    STAssertEquals(count, 2, @"promise should be redeemed 2 times, but redeemed %d times.", count);
+}
+
+- (void)testTwoCallbacks
+{
+    __block int count = 0;
+    FCPromise *promise = [[[FCPromise alloc] init] autorelease];
+    [promise onRedeem:^(id value) {
+        STAssertEqualObjects(value, @"value1", @"value of promise = %@", value);
+        count ++;
+    }];
+    STAssertEquals(count, 0, @"Of course the redeem-callback should not be invoked yet.");
+    [promise redeem:@"value1"];
+    STAssertEquals(count, 1, @"The redeem-callback should be invoked immediately after -[FCPromise onRedeem:] call.");
+    [promise onRedeem:^(id value) {
+        STAssertEqualObjects(value, @"value1", @"value of promise = $@", value);
+        count ++;
+    }];
+
+    STAssertEquals(count, 2, @"promise should be redeemed 2 times, but redeemed %d times.", count);
+}
+
+- (void)testRedeemTwice
+{
+    __block int count = 0;
+    FCPromise *promise = [[[FCPromise alloc] init] autorelease];
+    [promise onRedeem:^(id value) {
+        STAssertEqualObjects(value, @"value1", @"value of promise = %@", value);
+        count ++;
+    }];
+    [promise redeem:@"value1"];
+    [promise onRedeem:^(id value) {
+        STAssertEqualObjects(value, @"value1", @"value of promise = $@", value);
+        count ++;
+    }];
+    [promise redeem:@"value1"];
+
+    STAssertEquals(count, 2, @"promise should be redeemed 2 times, but redeemed %d times.", count);
+}
+
+- (void)testFuture
+{
+    // 1. The calculation starts on background thread.
+    // It takes 0.1 ms.
+    FCFuture *future = [[[[VerySlowCalculator alloc] init] autorelease] add:1 and:2];
+    __block int count = 0;
+
+    [future onRedeem:^(NSNumber *value) {
+        // 2. This block is invoked on main thread.
+        int result = [value intValue];
+        STAssertEquals(3, result, @"1 + 2 = 3");
+        count ++;
+    }];
     
+    // Wait for onRedeem-block invoked.
+    NSDate *timeoutDate = [NSDate dateWithTimeIntervalSinceNow:0.2];
+    while (count < 1 && [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:timeoutDate]) {
+        NSLog(@"Running current run loop.");
+    }
+
     STAssertEquals(1, count, "redeem count = %d", count);
 }
 

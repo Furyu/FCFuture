@@ -9,8 +9,6 @@ typedef void (^FCFutureCallback)(id);
 
 @interface FCFuture : NSObject
 
-- (id)initWithCallback:(FCFutureCallback)callback;
-
 - (FCFuture *)onRedeem:(FCFutureCallback)callback;
 
 @end

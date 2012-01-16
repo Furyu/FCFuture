@@ -5,71 +5,50 @@
 
 #import "FCFuture.h"
 
-@interface FCFuture ()
+#ifdef DEBUG
+#   define FCFutureDLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+#else
+#   define FCFutureDLog(...)
+#endif
 
-- (void)callback:(id)value;
+NSString * const FCFutureDidRedeemNotification = @"FCFutureDidRedeemNotification";
 
-@end
+NSString * const FCFutureDidRedeemNotificationUserInfoValueKey = @"FCFutureDidRedeemNotificationUserInfoValueKey";
 
 @implementation FCFuture {
-@private
-    FCFutureCallback _callback;
-    BOOL _called;
 @protected
     BOOL _redeemed;
     id _value;
 }
 
-- (id)initWithCallback:(FCFutureCallback)callback
-{
-    self = [super init];
-    if (self) {
-        _callback = [callback copy];
-    }
-
-    return self;
-}
-
-- (void)dealloc
-{
-    [_callback release];
-    [super dealloc];
-}
-
 - (FCFuture *)onRedeem:(FCFutureCallback)callback
 {
-    NSLog(@"1");
     @synchronized (self) {
-        NSLog(@"2");
-        NSAssert(_callback == nil, @"Limitation: You can set only 1 callback. callback = %p", _callback);
-
-        _callback = [callback copy];
-
-        NSLog(@"3");
         if (_redeemed) {
-            NSLog(@"4");
-            [self callback:_value];
+            FCFutureDLog(@"Immediately invoking the callback.");
+            if ([NSThread isMainThread]) {
+                callback(_value);
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    callback(_value);
+                });
+            }
+        } else {
+            FCFutureDLog(@"Delaying the callback.");
+            id *observer = malloc(sizeof(id));
+            *observer = [[NSNotificationCenter defaultCenter] addObserverForName:FCFutureDidRedeemNotification object:self queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification) {
+                FCFutureDLog(@"Observed a notification.");
+                callback([[notification userInfo] objectForKey:FCFutureDidRedeemNotificationUserInfoValueKey]);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[NSNotificationCenter defaultCenter] removeObserver:*observer];
+                    free(*observer);
+                    FCFutureDLog(@"Disposed an observer.")
+                });
+            }];
         }
-        NSLog(@"5");
     }
 
     return self;
-}
-
-- (void)callback:(id)value
-{
-    // Ensure that the callback is always done on main thread.
-    if (![NSThread isMainThread]) {
-        [self performSelectorOnMainThread:@selector(callback:) withObject:value waitUntilDone:NO];
-        return;
-    }
-    @synchronized (self) {
-        if (!_callback || _called) {
-            return;
-        }
-        _called = YES;
-    }
-    _callback(value);
 }
 
 @end
@@ -84,7 +63,9 @@
         }
         _redeemed = YES;
         _value = [value retain];
-        [self callback:value];
+
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:value forKey:FCFutureDidRedeemNotificationUserInfoValueKey];
+        [[NSNotificationCenter defaultCenter] postNotificationName:FCFutureDidRedeemNotification object:self userInfo:userInfo];
     }
     return self;
 }
