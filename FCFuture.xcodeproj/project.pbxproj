@@ -23,6 +23,15 @@
 		40FBF149B92DAD721D7E8399 /* FCFutureTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 40FBF149B92DAD721D7E8398 /* FCFutureTests.m */; };
 		40FBF149B92DAD721D7E839C /* FCFuture.m in Sources */ = {isa = PBXBuildFile; fileRef = 40FBF149B92DAD721D7E839B /* FCFuture.m */; };
 		40FBF149B92DAD721D7E839D /* FCFuture.m in Sources */ = {isa = PBXBuildFile; fileRef = 40FBF149B92DAD721D7E839B /* FCFuture.m */; };
+		40FBF149B92DAD721D7E83A1 /* MOCController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40FBF149B92DAD721D7E83A0 /* MOCController.m */; };
+		40FBF149B92DAD721D7E83A2 /* MOCController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40FBF149B92DAD721D7E83A0 /* MOCController.m */; };
+		9389699C14C0019100A7ADA4 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9389699A14C0019100A7ADA4 /* Model.xcdatamodeld */; };
+		9389699D14C0019100A7ADA4 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9389699A14C0019100A7ADA4 /* Model.xcdatamodeld */; };
+		938969A014C001EF00A7ADA4 /* BlogPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 9389699F14C001EF00A7ADA4 /* BlogPost.m */; };
+		938969A114C001EF00A7ADA4 /* BlogPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 9389699F14C001EF00A7ADA4 /* BlogPost.m */; };
+		938969A114C001EF00A7ADA6 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 938969A114C001EF00A7ADA5 /* CoreData.framework */; };
+		938969AA14C004BA00A7ADA4 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 938969A114C001EF00A7ADA5 /* CoreData.framework */; };
+		938969AA14C004BA00A7ADA8 /* MOCControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 938969AA14C004BA00A7ADA7 /* MOCControllerTests.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +67,14 @@
 		40FBF149B92DAD721D7E8398 /* FCFutureTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FCFutureTests.m; sourceTree = "<group>"; };
 		40FBF149B92DAD721D7E839B /* FCFuture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FCFuture.m; sourceTree = "<group>"; };
 		40FBF149B92DAD721D7E839E /* FCFuture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCFuture.h; sourceTree = "<group>"; };
+		40FBF149B92DAD721D7E83A0 /* MOCController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCController.m; sourceTree = "<group>"; };
+		40FBF149B92DAD721D7E83A3 /* MOCController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOCController.h; sourceTree = "<group>"; };
+		9389699B14C0019100A7ADA4 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		9389699E14C001EF00A7ADA4 /* BlogPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlogPost.h; sourceTree = "<group>"; };
+		9389699F14C001EF00A7ADA4 /* BlogPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BlogPost.m; sourceTree = "<group>"; };
+		938969A114C001EF00A7ADA5 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		938969AA14C004BA00A7ADA6 /* MOCControllerTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOCControllerTests.h; sourceTree = "<group>"; };
+		938969AA14C004BA00A7ADA7 /* MOCControllerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCControllerTests.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				938969AA14C004BA00A7ADA4 /* CoreData.framework in Frameworks */,
 				40FBF149B92DAD721D7E8368 /* UIKit.framework in Frameworks */,
 				40FBF149B92DAD721D7E836A /* Foundation.framework in Frameworks */,
 				40FBF149B92DAD721D7E836C /* CoreGraphics.framework in Frameworks */,
@@ -78,6 +96,7 @@
 				40FBF149B92DAD721D7E838C /* SenTestingKit.framework in Frameworks */,
 				40FBF149B92DAD721D7E838D /* UIKit.framework in Frameworks */,
 				40FBF149B92DAD721D7E838E /* Foundation.framework in Frameworks */,
+				938969A114C001EF00A7ADA6 /* CoreData.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -106,6 +125,7 @@
 		40FBF149B92DAD721D7E8366 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				938969A114C001EF00A7ADA5 /* CoreData.framework */,
 				40FBF149B92DAD721D7E838B /* SenTestingKit.framework */,
 				40FBF149B92DAD721D7E836B /* CoreGraphics.framework */,
 				40FBF149B92DAD721D7E8369 /* Foundation.framework */,
@@ -146,6 +166,7 @@
 				40FBF149B92DAD721D7E8398 /* FCFutureTests.m */,
 				40FBF149B92DAD721D7E8397 /* FCFutureTests.h */,
 				40FBF149B92DAD721D7E8392 /* Supporting Files */,
+				938969AA14C004BA00A7ADA5 /* Usage Examples */,
 			);
 			path = FCFutureTests;
 			sourceTree = "<group>";
@@ -164,8 +185,30 @@
 			children = (
 				40FBF149B92DAD721D7E839E /* FCFuture.h */,
 				40FBF149B92DAD721D7E839B /* FCFuture.m */,
+				40FBF149B92DAD721D7E839F /* Usage Examples */,
 			);
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		40FBF149B92DAD721D7E839F /* Usage Examples */ = {
+			isa = PBXGroup;
+			children = (
+				40FBF149B92DAD721D7E83A3 /* MOCController.h */,
+				40FBF149B92DAD721D7E83A0 /* MOCController.m */,
+				9389699A14C0019100A7ADA4 /* Model.xcdatamodeld */,
+				9389699E14C001EF00A7ADA4 /* BlogPost.h */,
+				9389699F14C001EF00A7ADA4 /* BlogPost.m */,
+			);
+			path = "Usage Examples";
+			sourceTree = "<group>";
+		};
+		938969AA14C004BA00A7ADA5 /* Usage Examples */ = {
+			isa = PBXGroup;
+			children = (
+				938969AA14C004BA00A7ADA7 /* MOCControllerTests.m */,
+				938969AA14C004BA00A7ADA6 /* MOCControllerTests.h */,
+			);
+			path = "Usage Examples";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -212,6 +255,9 @@
 /* Begin PBXProject section */
 		40FBF149B92DAD721D7E8358 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
 			buildConfigurationList = 40FBF149B92DAD721D7E8359 /* Build configuration list for PBXProject "FCFuture" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -276,6 +322,9 @@
 				40FBF149B92DAD721D7E8378 /* FCAppDelegate.m in Sources */,
 				40FBF149B92DAD721D7E837B /* FCViewController.m in Sources */,
 				40FBF149B92DAD721D7E839C /* FCFuture.m in Sources */,
+				40FBF149B92DAD721D7E83A1 /* MOCController.m in Sources */,
+				9389699C14C0019100A7ADA4 /* Model.xcdatamodeld in Sources */,
+				938969A014C001EF00A7ADA4 /* BlogPost.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,6 +334,10 @@
 			files = (
 				40FBF149B92DAD721D7E8399 /* FCFutureTests.m in Sources */,
 				40FBF149B92DAD721D7E839D /* FCFuture.m in Sources */,
+				40FBF149B92DAD721D7E83A2 /* MOCController.m in Sources */,
+				9389699D14C0019100A7ADA4 /* Model.xcdatamodeld in Sources */,
+				938969A114C001EF00A7ADA4 /* BlogPost.m in Sources */,
+				938969AA14C004BA00A7ADA8 /* MOCControllerTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,6 +507,7 @@
 				40FBF149B92DAD721D7E8362 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		40FBF149B92DAD721D7E8384 /* Build configuration list for PBXNativeTarget "FCFutureTests" */ = {
 			isa = XCConfigurationList;
@@ -462,8 +516,22 @@
 				40FBF149B92DAD721D7E8386 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		9389699A14C0019100A7ADA4 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				9389699B14C0019100A7ADA4 /* Model.xcdatamodel */,
+			);
+			currentVersion = 9389699B14C0019100A7ADA4 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 40FBF149B92DAD721D7E8358 /* Project object */;
 }

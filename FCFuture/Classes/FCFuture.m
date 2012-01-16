@@ -38,14 +38,19 @@
 
 - (FCFuture *)onRedeem:(FCFutureCallback)callback
 {
+    NSLog(@"1");
     @synchronized (self) {
+        NSLog(@"2");
         NSAssert(_callback == nil, @"Limitation: You can set only 1 callback. callback = %p", _callback);
 
         _callback = [callback copy];
 
+        NSLog(@"3");
         if (_redeemed) {
+            NSLog(@"4");
             [self callback:_value];
         }
+        NSLog(@"5");
     }
 
     return self;
@@ -53,10 +58,17 @@
 
 - (void)callback:(id)value
 {
-    if (!_callback || _called) {
+    // Ensure that the callback is always done on main thread.
+    if (![NSThread isMainThread]) {
+        [self performSelectorOnMainThread:@selector(callback:) withObject:value waitUntilDone:NO];
         return;
     }
-    _called = YES;
+    @synchronized (self) {
+        if (!_callback || _called) {
+            return;
+        }
+        _called = YES;
+    }
     _callback(value);
 }
 
